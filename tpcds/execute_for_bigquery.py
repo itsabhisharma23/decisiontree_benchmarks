@@ -5,7 +5,7 @@ from google.cloud import bigquery
 client = bigquery.Client()
 
 # Specify the folder containing your SQL files
-sql_files_folder = './tpcds/bigquery/'  # Replace with the actual path
+sql_files_folder = 'bigquery/'  # Replace with the actual path
 
 # Get a list of SQL files in the folder
 sql_files = [f for f in os.listdir(sql_files_folder) if f.endswith('.sql')]

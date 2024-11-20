@@ -36,10 +36,15 @@ for file_name in sql_files:
     )
     print(f"Submitting {file_name.split('.')[0]}")
     # Start the query
-    query_job = client.query(query, job_config=job_config,job_id=job_id)
+    query_job = client.query(query, job_config=job_config,job_id=job_id,timeout=3600*3)
 
     # Wait for the query to complete
-    query_job.result()
+    try:
+        query_job.result()  # Wait for the job to complete
+    except Exception as e:
+        print(f"Error executing query from {file_name}: {e}")
+        continue  # Skip to the next file if there's an error
+
 
     # Get execution time and slot milliseconds
     runtime_secs = (query_job.ended - query_job.started).total_seconds()

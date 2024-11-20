@@ -6,7 +6,7 @@ import datetime
 project_id = 'hadoop-benchmarking01'
 dataset_id = 'benchmarkingv1'
 res_table_id = 'benchmark_results'
-res_data=[]
+
 
 # Construct a BigQuery client object.
 client = bigquery.Client()
@@ -19,6 +19,7 @@ sql_files = [f for f in os.listdir(sql_files_folder) if f.endswith('.sql')]
 
 # Loop through the SQL files and execute them
 for file_name in sql_files:
+    res_data=[]
     # Construct the full file path
     file_path = os.path.join(sql_files_folder, file_name)
     # Read the SQL query from the file
@@ -33,7 +34,7 @@ for file_name in sql_files:
         use_query_cache=False,
         use_legacy_sql=False
     )
-
+    print(f"Submitting {file_name.split('.')[0]}")
     # Start the query
     query_job = client.query(query, job_config=job_config,job_id=job_id)
 
@@ -70,6 +71,7 @@ for file_name in sql_files:
         ],
     )
 
-job = client.load_table_from_json(res_data, table_ref, job_config=job_config)
-job.result()
-print(f"Loaded {len(res_data)} row(s) into BigQuery table {project_id}:{dataset_id}.{res_table_id} for {file_name.split('.')[0]}")
+    job = client.load_table_from_json(res_data, table_ref, job_config=job_config)
+    job.result()
+    print(f"Loaded data into BigQuery table {project_id}:{dataset_id}.{res_table_id} for {file_name.split('.')[0]}")
+

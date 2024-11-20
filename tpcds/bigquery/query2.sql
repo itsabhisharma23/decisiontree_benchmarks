@@ -1,4 +1,3 @@
-## Query 2
 WITH wscs 
      AS (SELECT sold_date_sk, 
                 sales_price 

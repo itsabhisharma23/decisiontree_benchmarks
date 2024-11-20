@@ -1,11 +1,18 @@
 import os
 from google.cloud import bigquery
+import datetime
+
+
+project_id = 'hadoop-benchmarking01'
+dataset_id = 'benchmarkingv1'
+res_table_id = 'benchmark_results'
+res_data=[]
 
 # Construct a BigQuery client object.
 client = bigquery.Client()
 
 # Specify the folder containing your SQL files
-sql_files_folder = 'bigquery/'  # Replace with the actual path
+sql_files_folder = 'bigquery/'  
 
 # Get a list of SQL files in the folder
 sql_files = [f for f in os.listdir(sql_files_folder) if f.endswith('.sql')]
@@ -14,27 +21,55 @@ sql_files = [f for f in os.listdir(sql_files_folder) if f.endswith('.sql')]
 for file_name in sql_files:
     # Construct the full file path
     file_path = os.path.join(sql_files_folder, file_name)
-
     # Read the SQL query from the file
     with open(file_path, 'r') as f:
         query = f.read()
 
-    # Configure the query job
+    # Generate a unique job ID (you can customize this as needed)
+    job_id = f"TPCDS_{file_name.split('.')[0]}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+    # Configure the query job with the job ID
     job_config = bigquery.QueryJobConfig(
-        use_query_cache=False,  # Disable cache for accurate timing
-        use_legacy_sql=False,  # Use Standard SQL
+        use_query_cache=False,
+        use_legacy_sql=False
     )
 
     # Start the query
-    query_job = client.query(query, job_config=job_config)
+    query_job = client.query(query, job_config=job_config,job_id=job_id)
 
     # Wait for the query to complete
     query_job.result()
 
     # Get execution time and slot milliseconds
-    execution_time = query_job.ended - query_job.started
+    runtime_secs = (query_job.ended - query_job.started).total_seconds()
     slot_milliseconds = query_job.slot_millis
+    res_data.append({
+        'benchmark_id': 1,
+        'service_id': 1,
+        'configuration_id': None,
+        'date_id': int(datetime.date.today().strftime("%Y%m%d")),
+        'runtime_seconds': runtime_secs,
+        'cost_measure': slot_milliseconds,
+        'cost_metric': 'slotms',
+        'query_no': int(file_name.split('.')[0].replace("query","")),
+    })
 
-    print(f"Query from file: {file_name}")
-    print(f"Execution time: {execution_time}")
-    print(f"Slot milliseconds: {slot_milliseconds}")
+    table_ref = client.dataset(dataset_id, project=project_id).table(res_table_id)
+
+
+    job_config = bigquery.LoadJobConfig(
+        schema=[  # If the table doesn't exist, you can define the schema here
+            bigquery.SchemaField("benchmark_id", "INTEGER", mode="REQUIRED"),
+            bigquery.SchemaField("service_id", "INTEGER", mode="REQUIRED"),
+            bigquery.SchemaField("configuration_id", "INTEGER", mode="NULLABLE"),
+            bigquery.SchemaField("date_id", "INTEGER", mode="REQUIRED"),
+            bigquery.SchemaField("runtime_seconds", "NUMERIC", mode="NULLABLE"),
+            bigquery.SchemaField("cost_measure", "NUMERIC", mode="NULLABLE"),
+            bigquery.SchemaField("cost_metric", "STRING", mode="NULLABLE"),
+            bigquery.SchemaField("query_no", "INTEGER", mode="NULLABLE"),
+        ],
+    )
+
+job = client.load_table_from_json(res_data, table_ref, job_config=job_config)
+job.result()
+print(f"Loaded {len(res_data)} row(s) into BigQuery table {project_id}:{dataset_id}.{res_table_id} for {file_name.split('.')[0]}")

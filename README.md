@@ -1,6 +1,6 @@
 # TPC-DS Benchmarking on BigQuery and Spark
 
-This repository provides a comprehensive framework for performing TPC-DS benchmarking on Google BigQuery and Apache Spark. It includes scripts and instructions for generating TPC-DS data, converting it to Parquet format, loading it into BigQuery, and executing the standard TPC-DS queries.
+This repository provides a comprehensive guide and scripts for performing TPC-DS benchmarking on Google BigQuery and Apache Spark. It includes scripts and instructions for generating TPC-DS data, converting it to Parquet format, loading it into BigQuery, and executing the standard TPC-DS queries.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ This repository provides a comprehensive framework for performing TPC-DS benchma
 
 Before you can run the benchmarks, you need to generate the TPC-DS data. Follow the instructions in this blog post:
 
-[Link to your blog post on generating TPC-DS data]
+[Generate TPCDS data on GCP](https://medium.com/google-cloud/how-to-generate-tpc-ds-data-in-gcp-b8e134b6ced9)
 
 This blog will guide you through using the `dsdgen` tool to generate the data files.
 
@@ -28,13 +28,13 @@ This blog will guide you through using the `dsdgen` tool to generate the data fi
 
 ## 2. Creating BigQuery Tables (DDLs)
 
-The `bigquery_ddl` directory contains the Data Definition Language (DDL) scripts for creating the TPC-DS tables in BigQuery.
+The `BQ_create_table_commands.sql` contains the Data Definition Language (DDL) scripts for creating the TPC-DS tables in BigQuery.
 
 **How to Use:**
 
 1.  Open the BigQuery console.
 2.  Navigate to your desired dataset.
-3.  Execute each DDL script (`.sql` file) from the `bigquery_ddl` directory to create the corresponding table.
+3.  Execute the DDL script (`BQ_create_table_commands.sql` file) to create the corresponding tables.
 
 ## 3. Converting Data to Parquet (GCS)
 

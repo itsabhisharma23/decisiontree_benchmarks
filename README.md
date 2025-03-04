@@ -55,9 +55,9 @@ The `download_tpcds_tables_as_parquet_from_bq.py` script converts download TPCDS
 
 1.  **Configure GCS Bucket:**
     * Create a GCS bucket to store the Parquet files.
-    * Update the script(s) in `data_conversion` with your bucket name.
+    * Update the GCS bucket name in `download_tpcds_tables_as_parquet_from_bq.py`.
 2.  **Run Conversion Script:**
-    * Execute the python that performs the conversion. 
+    * Execute the python code that performs the conversion. 
 3.  **Verify Upload:**
     * Check your GCS bucket to ensure the Parquet files have been uploaded successfully.
 

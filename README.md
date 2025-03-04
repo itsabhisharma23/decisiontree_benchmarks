@@ -36,9 +36,20 @@ The `BQ_create_table_commands.sql` contains the Data Definition Language (DDL) s
 2.  Navigate to your desired dataset.
 3.  Execute the DDL script (`BQ_create_table_commands.sql` file) to create the corresponding tables.
 
-## 3. Converting Data to Parquet (GCS)
+## 3. Loading Data into BigQuery
 
-The `data_conversion` directory contains scripts to convert the generated TPC-DS data files to Parquet format and upload them to a Google Cloud Storage (GCS) bucket.
+The `move_gcs_to_bq.sh` script can load the data flat files from GCS into the BigQuery tables.
+
+**How to Use:**
+
+1.  **Run Script:**
+    * Execute the script to initiate the BigQuery load jobs. This will load the flat files data into the corresponding BigQuery tables.
+3.  **Verify Data Load:**
+    * Query the BigQuery tables to ensure the data has been loaded correctly.
+
+## 4. Download Data to Parquet format (GCS)
+
+The `download_tpcds_tables_as_parquet_from_bq.sql` directory contains scripts to convert the generated TPC-DS data files to Parquet format and upload them to a Google Cloud Storage (GCS) bucket.
 
 **How to Use:**
 
@@ -51,18 +62,6 @@ The `data_conversion` directory contains scripts to convert the generated TPC-DS
 3.  **Verify Upload:**
     * Check your GCS bucket to ensure the Parquet files have been uploaded successfully.
 
-## 4. Loading Data into BigQuery
-
-The `data_loading` directory contains scripts to load the Parquet data from GCS into the BigQuery tables.
-
-**How to Use:**
-
-1.  **Configure BigQuery Load Jobs:**
-    * Update the scripts in `data_loading` with your project ID, dataset ID, and GCS bucket location.
-2.  **Run Load Scripts:**
-    * Execute the scripts to initiate the BigQuery load jobs. This will load the Parquet data into the corresponding BigQuery tables.
-3.  **Verify Data Load:**
-    * Query the BigQuery tables to ensure the data has been loaded correctly.
 
 ## 5. Running TPC-DS Queries on BigQuery
 

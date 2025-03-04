@@ -6,8 +6,8 @@ This repository provides a comprehensive guide and scripts for performing TPC-DS
 
 1.  **Generating TPC-DS Data**
 2.  **Creating BigQuery Tables (DDLs)**
-3.  **Converting Data to Parquet (GCS)**
-4.  **Loading Data into BigQuery**
+3.  **Loading Data into BigQuery**
+4.  **Download Data to Parquet format (GCS)**
 5.  **Running TPC-DS Queries on BigQuery**
 6.  **Running TPC-DS Queries on Spark**
 7.  **Prerequisites**

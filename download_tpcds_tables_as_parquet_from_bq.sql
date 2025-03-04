@@ -13,10 +13,10 @@ start_time = time.time()
 
 
 filenames = ["income_band", "promotion", "household_demographics", "customer_address", "web_page", "date_dim", "call_center", "catalog_returns", "web_site", "store", "web_returns", "customer_demographics", "catalog_page", "catalog_sales", "item", "customer", "inventory", "ship_mode", "web_sales", "reason", "store_returns", "store_sales", "warehouse", "time_dim"]
-
+project_id = "PROJECT_ID"
 
 for filename in filenames:
-  test_table_df = spark.read.format('com.google.cloud.spark.bigquery').option('table', "stock-data-ingess.TPCDS." + filename).load()
+  test_table_df = spark.read.format('com.google.cloud.spark.bigquery').option('table', project_id+".TPCDS." + filename).load()
   test_table_df.createOrReplaceTempView("table")
 
   query = """
